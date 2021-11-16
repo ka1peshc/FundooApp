@@ -7,7 +7,15 @@
 
   <ItemGroup>
     <Folder Include="Interface\" />
-    <Folder Include="Manager\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FundooModels\FundooModels.csproj" />
+    <ProjectReference Include="..\FundooRepository\FundooRepository.csproj" />
   </ItemGroup>
 
 </Project>
