@@ -6,10 +6,15 @@ using System.Text;
 
 namespace FundooManager.Manager
 {
-    //Declaring obj for the IUserRepository
-    private readonly IUserRepository repository;
     public class UserManager
     {
+        //Declaring obj for the IUserRepository
+        private readonly IUserRepository repository;
+
+        public UserManager(IUserRepository repository)
+        {
+            this.repository = repository;
+        }
         //register pass the user data to the repository
         public string Register(RegisterModel userData)
         {
