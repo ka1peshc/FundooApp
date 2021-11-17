@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FundooManager.Manager
 {
-    public class UserManager
+    public class UserManager : IUserManager
     {
         //Declaring obj for the IUserRepository
         private readonly IUserRepository repository;
@@ -21,7 +21,8 @@ namespace FundooManager.Manager
             try
             {
                 return this.repository.Register(userData);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

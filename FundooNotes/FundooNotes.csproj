@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FundooManager\FundooManager.csproj" />
     <ProjectReference Include="..\FundooModels\FundooModels.csproj" />
   </ItemGroup>
 
