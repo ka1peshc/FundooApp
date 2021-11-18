@@ -8,5 +8,7 @@ namespace FundooRepository.Repository
         IConfiguration Configuration { get; }
 
         string Register(RegisterModel userData);
+
+        string Login(LoginModel userData);
     }
 }

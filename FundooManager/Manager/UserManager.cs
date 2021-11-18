@@ -27,5 +27,22 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Data inserted properly call Repository login method
+        /// </summary>
+        /// <param name="userData">LoginModel</param>
+        /// <returns>passing data to repository</returns>
+        public string Login(LoginModel userData)
+        {
+            try
+            {
+                return this.repository.Login(userData);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

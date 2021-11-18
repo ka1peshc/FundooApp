@@ -20,7 +20,11 @@ namespace FundooRepository.Repository
         }
 
         public IConfiguration Configuration { get; }
-
+        /// <summary>
+        /// check if email already present or not and pass the data
+        /// </summary>
+        /// <param name="userData">RegisterModel</param>
+        /// <returns>String</returns>
         public string Register(RegisterModel userData)
         {
             try
@@ -48,6 +52,32 @@ namespace FundooRepository.Repository
             catch (ArgumentNullException e)
             {
                 throw new ArgumentNullException(e.Message);
+            }
+        }
+        
+        /// <summary>
+        /// Checking of email and password with our Dbset User
+        /// </summary>
+        /// <param name="userData">LoginModel</param>
+        /// <returns>String value</returns>
+        public string Login(LoginModel userData)
+        {
+            try
+            {
+                var validEmail = this.userContext.User.Where(x => x.Email == userData.Email).FirstOrDefault();
+                if (validEmail != null)
+                {
+                    if (userData != null)
+                    {
+                        var validPassword = this.userContext.User.Where(x => x.Password == userData.Password).FirstOrDefault();
+                        return "Login Successful";
+                    }
+                }
+                return "Email or Password Invalid";
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
             }
         }
     }

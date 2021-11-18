@@ -49,5 +49,34 @@ namespace FundooNotes.Controllers
                 return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
         }
+
+
+        [HttpGet]
+        [Route("api/login")]
+        public IActionResult Login([FromBody] LoginModel userData)
+        {
+            try
+            {
+                string result = this.manager.Login(userData);
+                if (result.Equals("Login Successful"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
+                }
+                else
+                {
+                    //Creates an BadRequestResult that produce a Status400 BadRequest response.
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
     }
 }
