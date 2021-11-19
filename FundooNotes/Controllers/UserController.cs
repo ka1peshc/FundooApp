@@ -74,6 +74,33 @@ namespace FundooNotes.Controllers
             }
         }
 
+        /// <summary>
+        /// Sending reset password api response
+        /// </summary>
+        /// <param name="userData">ResetPasswordModel</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("api/resetpassword")]
+        public IActionResult ResetPassword([FromBody] ResetPasswordModel userData)
+        {
+            try
+            {
+                string result = this.manager.ResetPassword(userData);
+                if (result.Equals("Password Reset Successful"))
+                {
+                    return this.Ok(new ResponseModel<String>() { Status = true, Message = result, Data = " Session data" });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+
         public IActionResult Index()
         {
             return View();

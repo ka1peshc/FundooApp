@@ -81,5 +81,35 @@ namespace FundooRepository.Repository
                 throw new Exception(e.Message);
             }
         }
+        /// <summary>
+        /// Take email and new password
+        /// </summary>
+        /// <param name="userData">ResetPasswordModel</param>
+        /// <returns>String</returns>
+        public string ResetPasswrod(ResetPasswordModel userData)
+        {
+            try
+            {
+                var validEmail = this.userContext.User.Where(x => x.Email == userData.Email).FirstOrDefault();
+                if (validEmail != null)
+                {
+                    if (userData != null)
+                    {
+
+                        validEmail.Password = encrypt.EncryptPassword(validEmail.Password);
+                        //add data to the database using user context
+                        this.userContext.Update(validEmail);
+                        //Saving data in database
+                        this.userContext.SaveChanges();
+                        return "Password Reset Successful";
+                    }
+                }
+                return "Enterd Wrong Email";
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }

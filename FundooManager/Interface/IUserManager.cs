@@ -6,5 +6,7 @@ namespace FundooManager.Manager
     {
         string Register(RegisterModel userData);
         string Login(LoginModel userData);
+
+        string ResetPassword(ResetPasswordModel userData);
     }
 }

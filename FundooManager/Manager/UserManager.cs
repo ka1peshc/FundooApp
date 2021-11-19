@@ -44,5 +44,22 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Check if new password is successful
+        /// </summary>
+        /// <param name="userData">ResetPasswordModel</param>
+        /// <returns>call to repository</returns>
+        public string ResetPassword(ResetPasswordModel userData)
+        {
+            try
+            {
+                return this.repository.ResetPasswrod(userData);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
