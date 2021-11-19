@@ -20,6 +20,8 @@ namespace FundooRepository.Repository
         }
 
         public IConfiguration Configuration { get; }
+
+        EncryptingClass encrypt = new EncryptingClass();
         /// <summary>
         /// check if email already present or not and pass the data
         /// </summary>
@@ -36,9 +38,8 @@ namespace FundooRepository.Repository
                 {
                     if (userData != null)
                     {
-                        //later encryp
-                        //userData.Password = this.EncryptPassword(userData.Password);
-                        userData.Password = userData.Password;
+                        //Encrypt password with MD5
+                        userData.Password = encrypt.EncryptPassword(userData.Password);
                         //add data to the database using user context
                         this.userContext.Add(userData);
                         //Saving data in database
