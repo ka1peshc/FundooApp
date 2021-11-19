@@ -1,4 +1,5 @@
 ﻿using FundooModels;
+using FundooRepository;
 using FundooRepository.Repository;
 using System;
 using System.Collections.Generic;
@@ -55,6 +56,21 @@ namespace FundooManager.Manager
             try
             {
                 return this.repository.ResetPasswrod(userData);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public string ForgotPassword(string email)
+        {
+            try
+            {
+                EmailForResetPassword passReset = new EmailForResetPassword();
+                passReset.SendEmail(email);
+                //return this.repository.ResetPasswrod(userData);
+                return "successful";
             }
             catch (Exception ex)
             {

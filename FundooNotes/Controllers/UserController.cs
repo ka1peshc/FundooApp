@@ -101,6 +101,32 @@ namespace FundooNotes.Controllers
             }
         }
 
+        /// <summary>
+        /// Call forget api using params where key=email and value=mailid
+        /// </summary>
+        /// <param name="email">Email in string</param>
+        /// <returns>api response</returns>
+        [HttpPost]
+        [Route("api/forgotpassword")]
+        public IActionResult ForgotPassword(string email)
+        {
+            try
+            {
+                string result = this.manager.ForgotPassword(email);
+                if (result == "successful")
+                {
+                    return this.Ok(new ResponseModel<String>() { Status = true, Message = result, Data = " Session data" });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
         public IActionResult Index()
         {
             return View();
