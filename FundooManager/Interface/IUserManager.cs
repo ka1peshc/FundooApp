@@ -9,5 +9,6 @@ namespace FundooManager.Manager
 
         string ResetPassword(ResetPasswordModel userData);
         string ForgotPassword(string email);
+        void SendEmail(string email);
     }
 }

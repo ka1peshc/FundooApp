@@ -13,6 +13,7 @@ namespace FundooNotes
     {
         public static void Main(string[] args)
         {
+            //method to create and configure a builder object
             CreateHostBuilder(args).Build().Run();
         }
 

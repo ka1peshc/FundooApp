@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq ;
+using System.Security.Cryptography;
 
 namespace FundooRepository.Repository
 {
@@ -21,7 +22,6 @@ namespace FundooRepository.Repository
 
         public IConfiguration Configuration { get; }
 
-        EncryptingClass encrypt = new EncryptingClass();
         /// <summary>
         /// check if email already present or not and pass the data
         /// </summary>
@@ -39,7 +39,7 @@ namespace FundooRepository.Repository
                     if (userData != null)
                     {
                         //Encrypt password with MD5
-                        userData.Password = encrypt.EncryptPassword(userData.Password);
+                        userData.Password = EncryptPassword(userData.Password);
                         //add data to the database using user context
                         this.userContext.Add(userData);
                         //Saving data in database
@@ -96,7 +96,7 @@ namespace FundooRepository.Repository
                     if (userData != null)
                     {
 
-                        validEmail.Password = encrypt.EncryptPassword(validEmail.Password);
+                        validEmail.Password = EncryptPassword(validEmail.Password);
                         //add data to the database using user context
                         this.userContext.Update(validEmail);
                         //Saving data in database
@@ -111,5 +111,22 @@ namespace FundooRepository.Repository
                 throw new Exception(e.Message);
             }
         }
+
+        public string EncryptPassword(string password)
+        {
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            byte[] encrypt;
+            UTF8Encoding encode = new UTF8Encoding();
+            //encrypt the given password string into Encrypted data  
+            encrypt = md5.ComputeHash(encode.GetBytes(password));
+            StringBuilder encryptdata = new StringBuilder();
+            //Create a new string by using the encrypted data  
+            for (int i = 0; i < encrypt.Length; i++)
+            {
+                encryptdata.Append(encrypt[i].ToString());
+            }
+            return encryptdata.ToString();
+        }
+
     }
 }
