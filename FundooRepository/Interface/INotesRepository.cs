@@ -8,5 +8,6 @@ namespace FundooRepository.Repository
         IConfiguration Configuration { get; }
 
         string CreateNote(NotesModel noteData);
+        string EditNote(EditNoteModel notesData);
     }
 }

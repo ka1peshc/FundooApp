@@ -41,5 +41,27 @@ namespace FundooRepository.Repository
                 throw new Exception(ex.Message);
             }
         }
+
+        public string EditNote(EditNoteModel notesData)
+        {
+            try
+            {
+                var validNoteId = this.userContext.Notes.Where(x => x.NoteId == notesData.NoteId).FirstOrDefault();
+                if (validNoteId != null)
+                {
+                    if (notesData != null)
+                    {
+                        this.userContext.Update(validNoteId);
+                        this.userContext.SaveChanges();
+                        return "Successfully created note";
+                    }
+                }
+                return "Unsuccessful to create Note";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
