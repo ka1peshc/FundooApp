@@ -22,30 +22,20 @@ namespace FundooNotes.Controllers
         [Route("api/register")]
         public IActionResult Register([FromBody]RegisterModel userData)
         {
-            //this.logger.LogInformation("Registration of new user initialized");
-            //HttpContext.Session.SetString(SessionName, userData.FirstName + " " + userData.LastName);
-            //HttpContext.Session.SetString(SessionMail, userData.Email);
             try
             {
                 string result = this.manager.Register(userData);
                 if(result.Equals("Registration Successful"))
                 {
-                    //var name = HttpContext.Session.GetString(SessionName);
-                    //var email = HttpContext.Session.GetString(SessionMail);
-                    //Create a OkResult object that produces an empty Status 200 OK response.
-                    //this.logger.LogInformation(userData.FirstName + " is registered");
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
                 }
                 else
                 {
-                    //this.logger.LogError("Registration unsuccessfull");
-                    //Creates an BadRequestResult that produce a Status400 BadRequest response.
                     return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
                 }
             }
             catch (Exception ex)
             {
-                //this.logger.LogError("Error occurs: " + ex.Message);
                 return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
         }
@@ -64,7 +54,6 @@ namespace FundooNotes.Controllers
                 }
                 else
                 {
-                    //Creates an BadRequestResult that produce a Status400 BadRequest response.
                     return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
                 }
             }
@@ -108,12 +97,12 @@ namespace FundooNotes.Controllers
         /// <returns>api response</returns>
         [HttpPost]
         [Route("api/forgotpassword")]
-        public IActionResult ForgotPassword(string email)
+        public async Task<IActionResult> ForgotPassword(string email)
         {
             try
             {
-                string result = this.manager.ForgotPassword(email);
-                if (result == "successful")
+                string result = await this.manager.ForgotPassword(email);
+                if (result == "Email send Successfully")
                 {
                     return this.Ok(new ResponseModel<String>() { Status = true, Message = result, Data = " Session data" });
                 }

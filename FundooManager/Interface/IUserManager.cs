@@ -1,4 +1,5 @@
 ﻿using FundooModels;
+using System.Threading.Tasks;
 
 namespace FundooManager.Manager
 {
@@ -6,9 +7,7 @@ namespace FundooManager.Manager
     {
         string Register(RegisterModel userData);
         string Login(LoginModel userData);
-
         string ResetPassword(ResetPasswordModel userData);
-        string ForgotPassword(string email);
-        void SendEmail(string email);
+        Task<string> ForgotPassword(string email);
     }
 }

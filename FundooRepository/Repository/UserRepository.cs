@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq ;
 using System.Security.Cryptography;
+using Experimental.System.Messaging;
+using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace FundooRepository.Repository
 {
@@ -110,6 +113,50 @@ namespace FundooRepository.Repository
             {
                 throw new Exception(e.Message);
             }
+        }
+
+        public async Task<string> ForgotPassword(string email)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                mail.From = new MailAddress(this.Configuration["Credentials:EmailId"]);
+                mail.To.Add(email);
+                mail.Subject = "Test Mail";
+                SendMSMQ();
+                mail.Body = ReceiveMSMQ();
+                SmtpServer.Port = 587;
+                SmtpServer.Credentials = new System.Net.NetworkCredential(this.Configuration["Credentials:EmailId"], this.Configuration["Credentials:EmailPassword"]);
+                SmtpServer.EnableSsl = true;
+                SmtpServer.Send(mail);
+                return "Email send Successfully";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public void SendMSMQ()
+        {
+            MessageQueue messageQueue;
+            if (MessageQueue.Exists(@".\Private$\Fundoo"))
+            {
+                messageQueue = new MessageQueue(@".\Private$\Fundoo");
+            }
+            else
+            {
+                messageQueue = MessageQueue.Create(@".\Private$\Fundoo");
+            }
+            string body = "This is for Testing SMTP mail from GMAIL";
+            messageQueue.Label = "Mail Body";
+            messageQueue.Send(body);
+        }
+        public string ReceiveMSMQ()
+        {
+            MessageQueue messageQueue = new MessageQueue(@".\Private$\Fundoo");
+            var receivemsg = messageQueue.Receive();
+            return receivemsg.ToString();
         }
 
         public string EncryptPassword(string password)

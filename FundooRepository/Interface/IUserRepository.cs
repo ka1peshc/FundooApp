@@ -1,5 +1,6 @@
 ﻿using FundooModels;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace FundooRepository.Repository
 {
@@ -12,5 +13,6 @@ namespace FundooRepository.Repository
         string Login(LoginModel userData);
         string ResetPasswrod(ResetPasswordModel userData);
         string EncryptPassword(string password);
+        Task<string> ForgotPassword(string email);
     }
 }

@@ -40,8 +40,8 @@ namespace FundooNotes.Controllers
         }
 
         [HttpPut]
-        [Route("api/ispin")]
-        public IActionResult UpdateIsPin([FromBody] EditNoteModel noteData)
+        [Route("api/editnote")]
+        public IActionResult EditNote([FromBody] EditNoteModel noteData)
         {
             try
             {
