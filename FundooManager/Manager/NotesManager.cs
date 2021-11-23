@@ -82,5 +82,14 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+
+        public string EditAddImage(NotesModel noteData)
+        {
+            try { return this.NotesRepository.EditAddImage(noteData); }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

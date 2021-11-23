@@ -11,5 +11,6 @@ namespace FundooManager.Manager
         string EditIsPin(NotesModel noteData);
         string EditColor(NotesModel noteData);
         string EditRemindMe(NotesModel noteData);
+        string EditAddImage(NotesModel noteData);
     }
 }

@@ -61,7 +61,7 @@ namespace FundooNotes.Controllers
             }
         }
         [HttpPut]
-        [Route("api/editnote")]
+        [Route("api/editIsArchive")]
         public IActionResult EditIsArchive([FromBody] NotesModel noteData)
         {
             try
@@ -155,6 +155,28 @@ namespace FundooNotes.Controllers
             try
             {
                 string result = this.notesManager.EditRemindMe(noteData);
+                if (result.Equals("Successfully add reminder"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPut]
+        [Route("api/editAddImage")]
+        public IActionResult EditAddImage([FromBody] NotesModel noteData)
+        {
+            try
+            {
+                string result = this.notesManager.EditAddImage(noteData);
                 if (result.Equals("Successfully add reminder"))
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
