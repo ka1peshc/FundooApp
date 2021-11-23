@@ -74,5 +74,25 @@ namespace FundooRepository.Repository
                 throw new Exception(ex.Message);
             }
         }
+
+        public string EditIsArchive(NotesModel noteData)
+        {
+            try
+            {
+                var validNoteId = this.userContext.Notes.Where(x => x.NoteId == noteData.NoteId).FirstOrDefault();
+                if (validNoteId != null)
+                {
+                    validNoteId.IsArchive = noteData.IsArchive;
+                    this.userContext.Update(validNoteId);
+                    this.userContext.SaveChanges();
+                    return "Successfully archive note";
+                }
+                return "Unsuccessful to archive Note";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

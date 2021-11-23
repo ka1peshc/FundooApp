@@ -60,5 +60,25 @@ namespace FundooNotes.Controllers
                 return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
         }
+        public IActionResult EditIsArchive([FromBody] NotesModel noteData)
+        {
+            try
+            {
+                string result = this.notesManager.EditNote(noteData);
+                if (result.Equals("Successfully archive note"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+
     }
 }

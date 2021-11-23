@@ -9,5 +9,6 @@ namespace FundooRepository.Repository
 
         string CreateNote(NotesModel noteData);
         string EditNote(NotesModel notesData);
+        string EditIsArchive(NotesModel noteData);
     }
 }

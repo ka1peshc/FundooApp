@@ -6,5 +6,6 @@ namespace FundooManager.Manager
     {
         string CheckCreateNotes(NotesModel noteData);
         string EditNote(NotesModel noteData);
+        string EditIsArchive(NotesModel noteData);
     }
 }

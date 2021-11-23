@@ -38,5 +38,14 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+
+        public string EditIsArchive(NotesModel noteData)
+        {
+            try{    return this.NotesRepository.EditIsArchive(noteData);}
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
