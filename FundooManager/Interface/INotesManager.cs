@@ -9,5 +9,6 @@ namespace FundooManager.Manager
         string EditIsArchive(NotesModel noteData);
         string EditIsTrash(NotesModel noteData);
         string EditIsPin(NotesModel noteData);
+        string EditColor(NotesModel noteData);
     }
 }

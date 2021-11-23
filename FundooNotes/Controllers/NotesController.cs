@@ -60,6 +60,8 @@ namespace FundooNotes.Controllers
                 return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
         }
+        [HttpPut]
+        [Route("api/editnote")]
         public IActionResult EditIsArchive([FromBody] NotesModel noteData)
         {
             try
@@ -80,6 +82,8 @@ namespace FundooNotes.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("api/editIsTrash")]
         public IActionResult EditIsTrash([FromBody] NotesModel noteData)
         {
             try
@@ -100,11 +104,35 @@ namespace FundooNotes.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("api/editIsPin")]
         public IActionResult EditIsPin([FromBody] NotesModel noteData)
         {
             try
             {
                 string result = this.notesManager.EditIsPin(noteData);
+                if (result.Equals("Successfully trash note"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPut]
+        [Route("api/editColor")]
+        public IActionResult EditColor([FromBody] NotesModel noteData)
+        {
+            try
+            {
+                string result = this.notesManager.EditColor(noteData);
                 if (result.Equals("Successfully trash note"))
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
