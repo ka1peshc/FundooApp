@@ -12,11 +12,11 @@ namespace FundooModels
         [Key]
         public int NoteId { get; set; }
         public string Title { get; set; }
-        public string NoteBody { get; set; }
+        public string Body { get; set; }
         [DefaultValue(false)]
-        public bool PinBody { get; set; }
+        public bool IsPin { get; set; }
         [DefaultValue(false)]
-        public bool RemindMe { get; set; }
+        public string RemindMe { get; set; }
         [DefaultValue("white")]
         public string Color { get; set; }
         public string AddImage { get; set; }
@@ -25,7 +25,8 @@ namespace FundooModels
         [DefaultValue(false)]
         public bool IsTrash { get; set; }
 
-        [ForeignKey("UserID")]
+        [ForeignKey("RegisterModel")]
         public int UserID { get; set; }
+        public virtual RegisterModel RegisterModel { get; set; }
     }
 }
