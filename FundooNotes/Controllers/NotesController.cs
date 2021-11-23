@@ -100,5 +100,24 @@ namespace FundooNotes.Controllers
             }
         }
 
+        public IActionResult EditIsPin([FromBody] NotesModel noteData)
+        {
+            try
+            {
+                string result = this.notesManager.EditIsPin(noteData);
+                if (result.Equals("Successfully trash note"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
     }
 }

@@ -114,5 +114,25 @@ namespace FundooRepository.Repository
                 throw new Exception(ex.Message);
             }
         }
+
+        public string EditIsPin(NotesModel noteData)
+        {
+            try
+            {
+                var validNoteId = this.userContext.Notes.Where(x => x.NoteId == noteData.NoteId).FirstOrDefault();
+                if (validNoteId != null)
+                {
+                    validNoteId.IsPin = noteData.IsPin;
+                    this.userContext.Update(validNoteId);
+                    this.userContext.SaveChanges();
+                    return "Successfully pin note";
+                }
+                return "Unsuccessful to pin Note";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

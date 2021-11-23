@@ -11,5 +11,6 @@ namespace FundooRepository.Repository
         string EditNote(NotesModel notesData);
         string EditIsArchive(NotesModel noteData);
         string EditIsTrash(NotesModel noteData);
+        string EditIsPin(NotesModel noteData);
     }
 }

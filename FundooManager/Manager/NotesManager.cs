@@ -55,5 +55,14 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+
+        public string EditIsPin(NotesModel noteData)
+        {
+            try { return this.NotesRepository.EditIsPin(noteData); }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
