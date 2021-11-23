@@ -41,12 +41,12 @@ namespace FundooNotes.Controllers
 
         [HttpPut]
         [Route("api/editnote")]
-        public IActionResult EditNote([FromBody] EditNoteModel noteData)
+        public IActionResult EditNote([FromBody] NotesModel noteData)
         {
             try
             {
                 string result = this.notesManager.EditNote(noteData);
-                if (result.Equals("Successfully created note"))
+                if (result.Equals("Successfully updated note"))
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
                 }

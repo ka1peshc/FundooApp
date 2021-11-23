@@ -42,21 +42,32 @@ namespace FundooRepository.Repository
             }
         }
 
-        public string EditNote(EditNoteModel notesData)
+        public string EditNote(NotesModel notesData)
         {
             try
             {
                 var validNoteId = this.userContext.Notes.Where(x => x.NoteId == notesData.NoteId).FirstOrDefault();
                 if (validNoteId != null)
                 {
-                    if (notesData != null)
+                    if (notesData.Title == null && notesData.Body != null)
                     {
-                        this.userContext.Update(validNoteId);
-                        this.userContext.SaveChanges();
-                        return "Successfully created note";
+                        validNoteId.Body = notesData.Body;
                     }
+                    else if (notesData.Title != null && notesData.Body == null) 
+                    {
+                        validNoteId.Title = notesData.Title;
+                    }
+                    else
+                    {
+                        validNoteId.Title = notesData.Title;
+                        validNoteId.Body = notesData.Body;
+                    }
+                    
+                    this.userContext.Update(validNoteId);
+                    this.userContext.SaveChanges();
+                    return "Successfully updated note";
                 }
-                return "Unsuccessful to create Note";
+                return "Unsuccessful to update Note";
             }
             catch (Exception ex)
             {

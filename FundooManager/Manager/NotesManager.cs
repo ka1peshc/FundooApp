@@ -27,7 +27,7 @@ namespace FundooManager.Manager
             }
         }
 
-        public string EditNote(EditNoteModel noteData)
+        public string EditNote(NotesModel noteData)
         {
             try
             {
