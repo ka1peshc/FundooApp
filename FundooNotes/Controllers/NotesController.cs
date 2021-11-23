@@ -64,8 +64,28 @@ namespace FundooNotes.Controllers
         {
             try
             {
-                string result = this.notesManager.EditNote(noteData);
+                string result = this.notesManager.EditIsArchive(noteData);
                 if (result.Equals("Successfully archive note"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+
+        public IActionResult EditIsTrash([FromBody] NotesModel noteData)
+        {
+            try
+            {
+                string result = this.notesManager.EditIsTrash(noteData);
+                if (result.Equals("Successfully trash note"))
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
                 }
