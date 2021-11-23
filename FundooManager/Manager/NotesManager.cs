@@ -73,5 +73,14 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+
+        public string EditRemindMe(NotesModel noteData)
+        {
+            try { return this.NotesRepository.EditRemindMe(noteData); }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

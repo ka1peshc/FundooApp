@@ -155,6 +155,25 @@ namespace FundooRepository.Repository
             }
         }
 
+        public string EditRemindMe(NotesModel noteData)
+        {
+            try
+            {
+                var validNoteId = this.userContext.Notes.Where(x => x.NoteId == noteData.NoteId).FirstOrDefault();
+                if (validNoteId != null)
+                {
+                    validNoteId.RemindMe = noteData.RemindMe;
+                    this.userContext.Update(validNoteId);
+                    this.userContext.SaveChanges();
+                    return "Successfully add reminder";
+                }
+                return "Unsuccessful to add reminder";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
     }
 }

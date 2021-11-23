@@ -111,7 +111,7 @@ namespace FundooNotes.Controllers
             try
             {
                 string result = this.notesManager.EditIsPin(noteData);
-                if (result.Equals("Successfully trash note"))
+                if (result.Equals("Successfully pin note"))
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
                 }
@@ -133,7 +133,29 @@ namespace FundooNotes.Controllers
             try
             {
                 string result = this.notesManager.EditColor(noteData);
-                if (result.Equals("Successfully trash note"))
+                if (result.Equals("Successfully change color"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPut]
+        [Route("api/editRemindMe")]
+        public IActionResult EditRemindMe([FromBody] NotesModel noteData)
+        {
+            try
+            {
+                string result = this.notesManager.EditRemindMe(noteData);
+                if (result.Equals("Successfully add reminder"))
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
                 }
