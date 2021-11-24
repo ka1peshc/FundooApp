@@ -3,6 +3,7 @@ using FundooRepository.Context;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +31,29 @@ namespace FundooRepository.Repository
                     return "Collaborator created successful";
                 }
                 return "Unsuccessful to create collaborator";
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
+        }
+
+        public async Task<string> DeleteCollaborator(int collaborator)
+        {
+            try
+            {
+                var checkCollabId = this.userContext.Collaborator.Where(x => x.CollaboratorID == collaborator).FirstOrDefault();
+                if (checkCollabId != null)
+                {
+                    if (collaborator != 0)
+                    {
+                        this.userContext.Remove(checkCollabId);
+                        await this.userContext.SaveChangesAsync();
+                        return "Successfully removed collaborator";
+                    }
+                    return "Collaborator body is null";
+                }
+                return "Collabortor id doesnot exist";
             }
             catch (ArgumentNullException ex)
             {

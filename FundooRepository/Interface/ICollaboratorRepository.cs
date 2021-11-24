@@ -9,5 +9,6 @@ namespace FundooRepository.Repository
         IConfiguration Configuration { get; }
 
         Task<string> CreateCollaborator(CollaboratorModel collaborator);
+        Task<string> DeleteCollaborator(int collaborator);
     }
 }
