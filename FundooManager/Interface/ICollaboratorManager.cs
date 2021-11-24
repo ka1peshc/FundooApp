@@ -1,4 +1,5 @@
 ﻿using FundooModels;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FundooManager.Manager
@@ -7,5 +8,6 @@ namespace FundooManager.Manager
     {
         Task<string> CreateCollaborator(CollaboratorModel collaborator);
         Task<string> DeleteCollaborator(int collaborator);
+        List<string> GetEmails(int emailId);
     }
 }

@@ -39,5 +39,16 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+        public List<string> GetEmails(int emailId)
+        {
+            try
+            {
+                return this.CollaboratorRepository.GetEmailName(emailId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

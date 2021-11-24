@@ -60,5 +60,27 @@ namespace FundooNotes.Controllers
                 return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
         }
+
+        [HttpGet]
+        [Route("api/getEmails")]
+        public IActionResult GetEmails(int noteid)
+        {
+            try
+            {
+                List<string> result = this.collaboratorManager.GetEmails(noteid);
+                if (result.Count != 0)
+                {
+                    return this.Ok(new { Status = true, Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Failed" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
     }
 }
