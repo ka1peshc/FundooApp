@@ -1,5 +1,7 @@
 ﻿using FundooModels;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FundooRepository.Repository
 {
@@ -7,13 +9,17 @@ namespace FundooRepository.Repository
     {
         IConfiguration Configuration { get; }
 
-        string CreateNote(NotesModel noteData);
-        string EditNote(NotesModel notesData);
-        string EditIsArchive(NotesModel noteData);
-        string EditIsTrash(NotesModel noteData);
-        string EditIsPin(NotesModel noteData);
-        string EditColor(NotesModel noteData);
-        string EditRemindMe(NotesModel noteData);
-        string EditAddImage(NotesModel noteData);
+        Task<string> CreateNote(NotesModel noteData);
+        Task<string> EditNote(NotesModel notesData);
+        Task<string> EditIsArchive(NotesModel noteData);
+        Task<string> EditIsTrash(NotesModel noteData);
+        Task<string> EditIsPin(NotesModel noteData);
+        Task<string> EditColor(NotesModel noteData);
+        Task<string> EditRemindMe(NotesModel noteData);
+        Task<string> EditAddImage(NotesModel noteData);
+
+        List<string> GetAllNotes(int userid);
+        List<string> GetArchiveNotes(int userid);
+        List<string> GetTrashNotes(int userid);
     }
 }

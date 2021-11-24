@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FundooRepository.Repository
 {
@@ -20,7 +21,7 @@ namespace FundooRepository.Repository
         }
         public IConfiguration Configuration { get; }
 
-        public string CreateNote(NotesModel noteData)
+        public async Task<string> CreateNote(NotesModel noteData)
         {
             try
             {
@@ -30,7 +31,7 @@ namespace FundooRepository.Repository
                     if (noteData != null)
                     {
                         this.userContext.Add(noteData);
-                        this.userContext.SaveChanges();
+                        await this.userContext.SaveChangesAsync();
                         return "Successfully created note";
                     }
                 }
@@ -42,7 +43,7 @@ namespace FundooRepository.Repository
             }
         }
 
-        public string EditNote(NotesModel notesData)
+        public async Task<string> EditNote(NotesModel notesData)
         {
             try
             {
@@ -64,7 +65,7 @@ namespace FundooRepository.Repository
                     }
                     
                     this.userContext.Update(validNoteId);
-                    this.userContext.SaveChanges();
+                    await this.userContext.SaveChangesAsync();
                     return "Successfully updated note";
                 }
                 return "Unsuccessful to update Note";
@@ -75,16 +76,20 @@ namespace FundooRepository.Repository
             }
         }
 
-        public string EditIsArchive(NotesModel noteData)
+        public async Task<string> EditIsArchive(NotesModel noteData)
         {
             try
             {
                 var validNoteId = this.userContext.Notes.Where(x => x.NoteId == noteData.NoteId).FirstOrDefault();
                 if (validNoteId != null)
                 {
+                    if (validNoteId.IsPin)
+                    {
+                        validNoteId.IsPin = false;
+                    }
                     validNoteId.IsArchive = noteData.IsArchive;
                     this.userContext.Update(validNoteId);
-                    this.userContext.SaveChanges();
+                    await this.userContext.SaveChangesAsync();
                     return "Successfully archive note";
                 }
                 return "Unsuccessful to archive Note";
@@ -95,16 +100,24 @@ namespace FundooRepository.Repository
             }
         }
 
-        public string EditIsTrash(NotesModel noteData)
+        public async Task<string> EditIsTrash(NotesModel noteData)
         {
             try
             {
                 var validNoteId = this.userContext.Notes.Where(x => x.NoteId == noteData.NoteId).FirstOrDefault();
                 if (validNoteId != null)
                 {
+                    if(validNoteId.IsPin)
+                    {
+                        validNoteId.IsPin = false;
+                    }
+                    if (validNoteId.IsArchive)
+                    {
+                        validNoteId.IsArchive = false;
+                    }
                     validNoteId.IsTrash = noteData.IsTrash;
                     this.userContext.Update(validNoteId);
-                    this.userContext.SaveChanges();
+                    await this.userContext.SaveChangesAsync();
                     return "Successfully trash note";
                 }
                 return "Unsuccessful to trash Note";
@@ -115,7 +128,7 @@ namespace FundooRepository.Repository
             }
         }
 
-        public string EditIsPin(NotesModel noteData)
+        public async Task<string> EditIsPin(NotesModel noteData)
         {
             try
             {
@@ -124,7 +137,7 @@ namespace FundooRepository.Repository
                 {
                     validNoteId.IsPin = noteData.IsPin;
                     this.userContext.Update(validNoteId);
-                    this.userContext.SaveChanges();
+                    await this.userContext.SaveChangesAsync();
                     return "Successfully pin note";
                 }
                 return "Unsuccessful to pin Note";
@@ -135,7 +148,7 @@ namespace FundooRepository.Repository
             }
         }
 
-        public string EditColor(NotesModel noteData)
+        public async Task<string> EditColor(NotesModel noteData)
         {
             try
             {
@@ -144,7 +157,7 @@ namespace FundooRepository.Repository
                 {
                     validNoteId.Color = noteData.Color;
                     this.userContext.Update(validNoteId);
-                    this.userContext.SaveChanges();
+                    await this.userContext.SaveChangesAsync();
                     return "Successfully change color";
                 }
                 return "Unsuccessful to change color";
@@ -155,7 +168,7 @@ namespace FundooRepository.Repository
             }
         }
 
-        public string EditRemindMe(NotesModel noteData)
+        public async Task<string> EditRemindMe(NotesModel noteData)
         {
             try
             {
@@ -164,7 +177,7 @@ namespace FundooRepository.Repository
                 {
                     validNoteId.RemindMe = noteData.RemindMe;
                     this.userContext.Update(validNoteId);
-                    this.userContext.SaveChanges();
+                    await this.userContext.SaveChangesAsync();
                     return "Successfully add reminder";
                 }
                 return "Unsuccessful to add reminder";
@@ -175,7 +188,7 @@ namespace FundooRepository.Repository
             }
         }
 
-        public string EditAddImage(NotesModel noteData)
+        public async Task<string> EditAddImage(NotesModel noteData)
         {
             try
             {
@@ -184,12 +197,87 @@ namespace FundooRepository.Repository
                 {
                     validNoteId.AddImage = noteData.AddImage;
                     this.userContext.Update(validNoteId);
-                    this.userContext.SaveChanges();
+                    await this.userContext.SaveChangesAsync();
                     return "Successfully add reminder";
                 }
                 return "Unsuccessful to add reminder";
             }
             catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<string> GetAllNotes(int userid)
+        {
+            try
+            {
+                List<string> allnotes = new List<string>();
+                if (userid != 0)
+                {
+                    IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.UserID == userid select x;
+                    foreach (var note in notes)
+                    {
+                        string result = note.NoteId + " " + note.Title + " " + note.Body + " "+note.Color+" "+note.IsPin+" " + note.IsArchive + " " + note.IsTrash;
+                        allnotes.Add(result);
+                    }
+                    return allnotes;
+                }
+                return allnotes;
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<string> GetArchiveNotes(int userid)
+        {
+            try
+            {
+                List<string> allnotes = new List<string>();
+                if (userid != 0)
+                {
+                    IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.UserID == userid select x;
+                    foreach (var note in notes)
+                    {
+                        if (note.IsArchive)
+                        {
+                            string result = note.NoteId + " " + note.Title + " " + note.Body + " " + note.Color + " " + note.IsPin + " " + note.IsArchive + " " + note.IsTrash;
+                            allnotes.Add(result);
+                        }
+                    }
+                    return allnotes;
+                }
+                return allnotes;
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<string> GetTrashNotes(int userid)
+        {
+            try
+            {
+                List<string> allnotes = new List<string>();
+                if (userid != 0)
+                {
+                    IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.UserID == userid select x;
+                    foreach (var note in notes)
+                    {
+                        if (note.IsTrash)
+                        {
+                            string result = note.NoteId + " " + note.Title + " " + note.Body + " " + note.Color + " " + note.IsPin + " " + note.IsArchive + " " + note.IsTrash;
+                            allnotes.Add(result);
+                        }
+                    }
+                    return allnotes;
+                }
+                return allnotes;
+            }
+            catch (ArgumentNullException ex)
             {
                 throw new Exception(ex.Message);
             }

@@ -3,6 +3,7 @@ using FundooRepository.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FundooManager.Manager
 {
@@ -15,11 +16,11 @@ namespace FundooManager.Manager
             this.NotesRepository = repository;
         }
 
-        public string CheckCreateNotes(NotesModel noteData)
+        public async Task<string> CheckCreateNotes(NotesModel noteData)
         {
             try
             {
-                return this.NotesRepository.CreateNote(noteData);
+                return await this.NotesRepository.CreateNote(noteData);
             }
             catch (Exception ex)
             {
@@ -27,11 +28,11 @@ namespace FundooManager.Manager
             }
         }
 
-        public string EditNote(NotesModel noteData)
+        public async Task<string> EditNote(NotesModel noteData)
         {
             try
             {
-                return this.NotesRepository.EditNote(noteData);
+                return await this.NotesRepository.EditNote(noteData);
             }
             catch (Exception ex)
             {
@@ -39,53 +40,80 @@ namespace FundooManager.Manager
             }
         }
 
-        public string EditIsArchive(NotesModel noteData)
+        public async Task<string> EditIsArchive(NotesModel noteData)
         {
-            try{    return this.NotesRepository.EditIsArchive(noteData);}
+            try{    return await this.NotesRepository.EditIsArchive(noteData);}
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-        public string EditIsTrash(NotesModel noteData)
+        public async Task<string> EditIsTrash(NotesModel noteData)
         {
-            try { return this.NotesRepository.EditIsTrash(noteData); }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public string EditIsPin(NotesModel noteData)
-        {
-            try { return this.NotesRepository.EditIsPin(noteData); }
+            try { return await this.NotesRepository.EditIsTrash(noteData); }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
 
-        public string EditColor(NotesModel noteData)
+        public async Task<string> EditIsPin(NotesModel noteData)
         {
-            try { return this.NotesRepository.EditColor(noteData); }
+            try { return await this.NotesRepository.EditIsPin(noteData); }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
 
-        public string EditRemindMe(NotesModel noteData)
+        public async Task<string> EditColor(NotesModel noteData)
         {
-            try { return this.NotesRepository.EditRemindMe(noteData); }
+            try { return await this.NotesRepository.EditColor(noteData); }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
 
-        public string EditAddImage(NotesModel noteData)
+        public async Task<string> EditRemindMe(NotesModel noteData)
         {
-            try { return this.NotesRepository.EditAddImage(noteData); }
+            try { return await this.NotesRepository.EditRemindMe(noteData); }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> EditAddImage(NotesModel noteData)
+        {
+            try { return await this.NotesRepository.EditAddImage(noteData); }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<string> GetAllNotes(int userid)
+        {
+            try { return this.NotesRepository.GetAllNotes(userid); }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<string> GetArchiveNotes(int userid)
+        {
+            try { return this.NotesRepository.GetArchiveNotes(userid); }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<string> GetTrashNotes(int userid)
+        {
+            try { return this.NotesRepository.GetArchiveNotes(userid); }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
