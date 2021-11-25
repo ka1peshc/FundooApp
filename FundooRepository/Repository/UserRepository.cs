@@ -9,6 +9,10 @@ using System.Security.Cryptography;
 using Experimental.System.Messaging;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using StackExchange.Redis;
 
 namespace FundooRepository.Repository
 {
@@ -71,13 +75,19 @@ namespace FundooRepository.Repository
                 var validEmail = this.userContext.User.Where(x => x.Email == userData.Email).FirstOrDefault();
                 if (validEmail != null)
                 {
-                    if (userData != null)
+                    var validPass = this.userContext.User.Where(x => x.Password == EncryptPassword(userData.Password)).FirstOrDefault();
+                    if (validPass != null)
                     {
-                        var validPassword = this.userContext.User.Where(x => x.Password == userData.Password).FirstOrDefault();
+                        ConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+                        IDatabase database = connectionMultiplexer.GetDatabase();
+                        database.StringSet(key: "First Name", validEmail.FirstName);
+                        database.StringSet(key: "Last Name", validEmail.LastName);
+
                         return "Login Successful";
                     }
+                    return "Password is invalid";
                 }
-                return "Email or Password Invalid";
+                return "Email is invalid";
             }
             catch (Exception e)
             {
@@ -173,6 +183,24 @@ namespace FundooRepository.Repository
                 encryptdata.Append(encrypt[i].ToString());
             }
             return encryptdata.ToString();
+        }
+
+        public string GenerateToken(string email)
+        {
+            byte[] key = Encoding.UTF8.GetBytes(this.Configuration["Secret"]);
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(key);
+            SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] {
+                      new Claim(ClaimTypes.Name, email)}),
+                Expires = DateTime.UtcNow.AddMinutes(30),
+                SigningCredentials = new SigningCredentials(securityKey,
+                SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken token = handler.CreateJwtSecurityToken(descriptor);
+            return handler.WriteToken(token);
         }
 
     }

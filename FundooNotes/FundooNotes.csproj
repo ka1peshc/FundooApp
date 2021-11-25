@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CloudinaryDotNet" Version="1.15.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0">
@@ -13,6 +15,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.OpenApi" Version="1.2.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.2.88" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 

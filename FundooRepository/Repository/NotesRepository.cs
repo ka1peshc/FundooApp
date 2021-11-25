@@ -1,5 +1,9 @@
-﻿using FundooModels;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using FundooModels;
 using FundooRepository.Context;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -255,6 +259,25 @@ namespace FundooRepository.Repository
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public string UploadAndGetImageUrl(IFormFile fileUpload, HttpPostAttribute selboton)
+        {
+            var cloudinary = new Cloudinary(
+            new Account(
+            "dgofsupp6",
+            "876618241945163",
+            "Rnh7j0-QEbWWyqUcoPI0CDpUEWA"));
+
+            var uploadParams = new ImageUploadParams()
+            {
+                File = new FileDescription(fileUpload.FileName, fileUpload.OpenReadStream()),
+            };
+
+            var uploadResult = cloudinary.Upload(uploadParams);
+
+            var uplPath = uploadResult.Url;
+            return uplPath.ToString();
         }
     }
 }
