@@ -18,8 +18,8 @@ namespace FundooRepository.Repository
         Task<string> EditRemindMe(NotesModel noteData);
         Task<string> EditAddImage(NotesModel noteData);
 
-        List<string> GetAllNotes(int userid);
-        List<string> GetArchiveNotes(int userid);
-        List<string> GetTrashNotes(int userid);
+        IEnumerable<NotesModel> GetAllNotes(int userid);
+        IEnumerable<NotesModel> GetArchiveNotes(bool archive);
+        IEnumerable<NotesModel> GetTrashNotes(bool trash);
     }
 }

@@ -93,7 +93,7 @@ namespace FundooManager.Manager
             }
         }
 
-        public List<string> GetAllNotes(int userid)
+        public IEnumerable<NotesModel> GetAllNotes(int userid)
         {
             try { return this.NotesRepository.GetAllNotes(userid); }
             catch (Exception ex)
@@ -102,18 +102,18 @@ namespace FundooManager.Manager
             }
         }
 
-        public List<string> GetArchiveNotes(int userid)
+        public IEnumerable<NotesModel> GetArchiveNotes(bool archive)
         {
-            try { return this.NotesRepository.GetArchiveNotes(userid); }
+            try { return this.NotesRepository.GetArchiveNotes(archive); }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
 
-        public List<string> GetTrashNotes(int userid)
+        public IEnumerable<NotesModel> GetTrashNotes(bool trash)
         {
-            try { return this.NotesRepository.GetArchiveNotes(userid); }
+            try { return this.NotesRepository.GetArchiveNotes(trash); }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);

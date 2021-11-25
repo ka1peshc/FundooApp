@@ -208,22 +208,21 @@ namespace FundooRepository.Repository
             }
         }
 
-        public List<string> GetAllNotes(int userid)
+        public IEnumerable<NotesModel> GetAllNotes(int userid)
         {
             try
             {
-                List<string> allnotes = new List<string>();
-                if (userid != 0)
+                List<NotesModel> tempList = new List<NotesModel>();
+                IEnumerable<NotesModel> result;
+                IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.UserID == userid select x;
+                foreach(var note in notes)
                 {
-                    IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.UserID == userid select x;
-                    foreach (var note in notes)
-                    {
-                        string result = note.NoteId + " " + note.Title + " " + note.Body + " "+note.Color+" "+note.IsPin+" " + note.IsArchive + " " + note.IsTrash;
-                        allnotes.Add(result);
-                    }
-                    return allnotes;
+                    if(note.IsArchive == true && note.IsTrash == true)
+                        tempList.Add(note);
                 }
-                return allnotes;
+                result = tempList;
+
+                return result;
             }
             catch (ArgumentNullException ex)
             {
@@ -231,25 +230,12 @@ namespace FundooRepository.Repository
             }
         }
 
-        public List<string> GetArchiveNotes(int userid)
+        public IEnumerable<NotesModel> GetArchiveNotes(bool archive)
         {
             try
             {
-                List<string> allnotes = new List<string>();
-                if (userid != 0)
-                {
-                    IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.UserID == userid select x;
-                    foreach (var note in notes)
-                    {
-                        if (note.IsArchive)
-                        {
-                            string result = note.NoteId + " " + note.Title + " " + note.Body + " " + note.Color + " " + note.IsPin + " " + note.IsArchive + " " + note.IsTrash;
-                            allnotes.Add(result);
-                        }
-                    }
-                    return allnotes;
-                }
-                return allnotes;
+                IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.IsArchive == archive select x;
+                return notes;
             }
             catch (ArgumentNullException ex)
             {
@@ -257,25 +243,13 @@ namespace FundooRepository.Repository
             }
         }
 
-        public List<string> GetTrashNotes(int userid)
+        public IEnumerable<NotesModel> GetTrashNotes(bool trash)
         {
             try
             {
-                List<string> allnotes = new List<string>();
-                if (userid != 0)
-                {
-                    IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.UserID == userid select x;
-                    foreach (var note in notes)
-                    {
-                        if (note.IsTrash)
-                        {
-                            string result = note.NoteId + " " + note.Title + " " + note.Body + " " + note.Color + " " + note.IsPin + " " + note.IsArchive + " " + note.IsTrash;
-                            allnotes.Add(result);
-                        }
-                    }
-                    return allnotes;
-                }
-                return allnotes;
+                
+                IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.IsTrash == trash select x;
+                return notes;
             }
             catch (ArgumentNullException ex)
             {

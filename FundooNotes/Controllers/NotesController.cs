@@ -198,8 +198,8 @@ namespace FundooNotes.Controllers
         {
             try
             {
-                List<string> result = this.notesManager.GetAllNotes(userid);
-                if(result.Count != 0)
+                IEnumerable<NotesModel> result = this.notesManager.GetAllNotes(userid);
+                if((int)result.Count() != 0)
                 {
                     return this.Ok(new { Status = true, Data = result });
                 }
@@ -216,12 +216,12 @@ namespace FundooNotes.Controllers
 
         [HttpGet]
         [Route("api/getArchiveNotes")]
-        public IActionResult GetArchiveNotes(int userid)
+        public IActionResult GetArchiveNotes(bool archive)
         {
             try
             {
-                List<string> result = this.notesManager.GetArchiveNotes(userid);
-                if (result.Count != 0)
+                IEnumerable<NotesModel> result = this.notesManager.GetArchiveNotes(archive);
+                if ((int)result.Count() != 0)
                 {
                     return this.Ok(new { Status = true, Data = result });
                 }
@@ -238,12 +238,12 @@ namespace FundooNotes.Controllers
 
         [HttpGet]
         [Route("api/getTrashNotes")]
-        public IActionResult GetTrashNotes(int userid)
+        public IActionResult GetTrashNotes(bool trash)
         {
             try
             {
-                List<string> result = this.notesManager.GetTrashNotes(userid);
-                if (result.Count != 0)
+                IEnumerable<NotesModel> result = this.notesManager.GetTrashNotes(trash);
+                if ((int)result.Count() != 0)
                 {
                     return this.Ok(new { Status = true, Data = result });
                 }
