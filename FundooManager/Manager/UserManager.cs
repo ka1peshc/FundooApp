@@ -1,11 +1,13 @@
-﻿using FundooModels;
-using FundooRepository;
-using FundooRepository.Repository;
-using System;
-using System.Collections.Generic;
-using System.Net.Mail;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using FundooModels;
+using FundooRepository.Repository;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+
 
 namespace FundooManager.Manager
 {
@@ -14,11 +16,18 @@ namespace FundooManager.Manager
         //Declaring obj for the IUserRepository
         private readonly IUserRepository repository;
 
-        public UserManager(IUserRepository repository)
+        public UserManager(IUserRepository repository,IConfiguration configuration)
         {
             this.repository = repository;
+            this.Configuration = configuration;
         }
-        //register pass the user data to the repository
+        public IConfiguration Configuration { get; }
+        
+        /// <summary>
+        /// Creating new user
+        /// </summary>
+        /// <param name="userData"></param>
+        /// <returns></returns>
         public string Register(RegisterModel userData)
         {
             try
@@ -78,5 +87,22 @@ namespace FundooManager.Manager
             }
         }
 
+        public string GenerateToken(string email)
+        {
+            byte[] key = Encoding.UTF8.GetBytes(this.Configuration["Secret"]);
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(key);
+            SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] {
+                      new Claim(ClaimTypes.Name, email)}),
+                Expires = DateTime.UtcNow.AddMinutes(30),
+                SigningCredentials = new SigningCredentials(securityKey,
+                SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken token = handler.CreateJwtSecurityToken(descriptor);
+            return handler.WriteToken(token);
+        }
     }
 }

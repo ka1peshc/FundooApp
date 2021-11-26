@@ -2,6 +2,7 @@
 using FundooModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace FundooNotes.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/login")]
         public IActionResult Login([FromBody] LoginModel userData)
         {
@@ -50,7 +51,20 @@ namespace FundooNotes.Controllers
                 string result = this.manager.Login(userData);
                 if (result.Equals("Login Successful"))
                 {
-                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data" });
+                    ConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+                    IDatabase database = connectionMultiplexer.GetDatabase();
+                    string firstName = database.StringGet("First Name");
+                    string lastName = database.StringGet("Last Name");
+                    RegisterModel data = new RegisterModel
+                    {
+                        FirstName = firstName,
+                        LastName = lastName,
+                        //UserID = userData,
+                        Email = userData.Email
+                    };
+                    string tokenString = this.manager.GenerateToken(userData.Email);
+                    //return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = " Session data"});
+                    return this.Ok(new { Status = true, Message = result, Data = " Session data", Token = tokenString });
                 }
                 else
                 {

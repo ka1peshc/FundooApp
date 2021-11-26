@@ -24,6 +24,7 @@ namespace FundooModels
         public bool IsArchive { get; set; }
         [DefaultValue(false)]
         public bool IsTrash { get; set; }
+        public string Image { get; set; }
 
         [ForeignKey("RegisterModel")]
         public int UserID { get; set; }

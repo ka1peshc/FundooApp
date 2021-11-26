@@ -1,4 +1,6 @@
 ﻿using FundooModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,5 +23,6 @@ namespace FundooRepository.Repository
         IEnumerable<NotesModel> GetAllNotes(int userid);
         IEnumerable<NotesModel> GetArchiveNotes(bool archive);
         IEnumerable<NotesModel> GetTrashNotes(bool trash);
+        string UploadAndGetImageUrl(IFormFile fileUpload, HttpPostAttribute selboton);
     }
 }

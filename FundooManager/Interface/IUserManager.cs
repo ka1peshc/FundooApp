@@ -9,5 +9,6 @@ namespace FundooManager.Manager
         string Login(LoginModel userData);
         string ResetPassword(ResetPasswordModel userData);
         Task<string> ForgotPassword(string email);
+        string GenerateToken(string email);
     }
 }

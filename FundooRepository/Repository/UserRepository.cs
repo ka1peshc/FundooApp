@@ -185,23 +185,5 @@ namespace FundooRepository.Repository
             return encryptdata.ToString();
         }
 
-        public string GenerateToken(string email)
-        {
-            byte[] key = Encoding.UTF8.GetBytes(this.Configuration["Secret"]);
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(key);
-            SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[] {
-                      new Claim(ClaimTypes.Name, email)}),
-                Expires = DateTime.UtcNow.AddMinutes(30),
-                SigningCredentials = new SigningCredentials(securityKey,
-                SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            JwtSecurityToken token = handler.CreateJwtSecurityToken(descriptor);
-            return handler.WriteToken(token);
-        }
-
     }
 }
