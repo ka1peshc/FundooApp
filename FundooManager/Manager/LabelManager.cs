@@ -27,5 +27,17 @@ namespace FundooManager.Manager
                 throw new ArgumentNullException(ex.Message);
             }
         }
+
+        public async Task<string> AddLabelToAccount(LabelModel labelData)
+        {
+            try
+            {
+                return await this.LabelRepository.AddLabelToAccount(labelData);
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
+        }
     }
 }

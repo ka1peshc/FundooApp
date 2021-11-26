@@ -9,5 +9,6 @@ namespace FundooRepository.Repository
         IConfiguration Configuration { get; }
 
         Task<string> AddLabelToNote(LabelModel labelData);
+        Task<string> AddLabelToAccount(LabelModel labelData);
     }
 }

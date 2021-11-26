@@ -33,5 +33,19 @@ namespace FundooRepository.Repository
                 throw new ArgumentNullException(ex.Message);
             }
         }
+
+        public async Task<string> AddLabelToAccount(LabelModel labelData)
+        {
+            try
+            {
+                this.userContext.Add(labelData);
+                await this.userContext.SaveChangesAsync();
+                return "Label added to account";
+            }
+            catch(ArgumentNullException ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
+        }
     }
 }

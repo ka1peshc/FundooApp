@@ -6,5 +6,6 @@ namespace FundooManager.Manager
     public interface ILabelManager
     {
         Task<string> AddLabelToNote(LabelModel labelData);
+        Task<string> AddLabelToAccount(LabelModel labelData);
     }
 }
