@@ -1,25 +1,49 @@
-﻿using FundooModels;
-using FundooRepository.Context;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="NotesRepository.cs" company="JoyBoy">
+// Copyright (c) JoyBoy. All rights reserved.
+// </copyright>
 
 namespace FundooRepository.Repository
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using FundooModels;
+    using FundooRepository.Context;
+    using Microsoft.Extensions.Configuration;
+
+    /// <summary>
+    /// Interact with Collaborator table
+    /// </summary>
     public class CollaboratorRepository : ICollaboratorRepository
     {
+        /// <summary>
+        /// private declaration of UserContext
+        /// </summary>
         private readonly UserContext userContext;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollaboratorRepository"/> class
+        /// </summary>
+        /// <param name="configuration">Configuration</param>
+        /// <param name="userContext">UserContext</param>
         public CollaboratorRepository(IConfiguration configuration, UserContext userContext)
         {
             this.Configuration = configuration;
             this.userContext = userContext;
 
         }
+
+        /// <summary>
+        /// Gets configuration from project
+        /// </summary>
         public IConfiguration Configuration { get; }
+
+        /// <summary>
+        /// Create a collaborator
+        /// </summary>
+        /// <param name="collaborator">CollaboratorModel</param>
+        /// <returns>http response</returns>
         public async Task<string> CreateCollaborator(CollaboratorModel collaborator)
         {
             try
@@ -38,6 +62,11 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Delete whole collaborator
+        /// </summary>
+        /// <param name="collaborator">collaborator id</param>
+        /// <returns>http response</returns>
         public async Task<string> DeleteCollaborator(int collaborator)
         {
             try
@@ -61,6 +90,11 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Get email related to collaborator
+        /// </summary>
+        /// <param name="noteId">note id</param>
+        /// <returns>http response</returns>
         public List<string> GetEmailName(int noteId)
         {
             try
@@ -75,7 +109,6 @@ namespace FundooRepository.Repository
                         string result = email.CollaboratorID + " " + email.NoteId + " " + email.EmailId;
                         emails.Add(result);
                     }
-
                 }
                 return emails;
             }

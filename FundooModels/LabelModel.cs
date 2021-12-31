@@ -10,7 +10,7 @@ namespace FundooModels
     {
         [Key]
         public int LabelId { get; set; }
-        public string Lable { get; set; }
+        public string Label { get; set; }
         [ForeignKey("RegisterModel")]
         public int UserId { get; set; }
         public virtual RegisterModel RegisterModel { get; set; }

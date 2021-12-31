@@ -1,30 +1,52 @@
-﻿using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using FundooModels;
-using FundooRepository.Context;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="NotesRepository.cs" company="JoyBoy">
+// Copyright (c) JoyBoy. All rights reserved.
+// </copyright>
 
 namespace FundooRepository.Repository
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using CloudinaryDotNet;
+    using CloudinaryDotNet.Actions;
+    using FundooModels;
+    using FundooRepository.Context;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+
+    /// <summary>
+    /// Interact with Notes table
+    /// </summary>
     public class NotesRepository : INotesRepository
     {
+        /// <summary>
+        /// private declaration of UserContext
+        /// </summary>
         private readonly UserContext userContext;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotesRepository"/> class
+        /// </summary>
+        /// <param name="configuration">Configuration</param>
+        /// <param name="userContext">UserContext</param>
         public NotesRepository(IConfiguration configuration, UserContext userContext)
         {
             this.Configuration = configuration;
             this.userContext = userContext;
-
         }
+
+        /// <summary>
+        /// Gets configuration from project
+        /// </summary>
         public IConfiguration Configuration { get; }
 
+        /// <summary>
+        /// Create a new note
+        /// </summary>
+        /// <param name="noteData">NotesModel</param>
+        /// <returns>http response</returns>
         public async Task<string> CreateNote(NotesModel noteData)
         {
             try
@@ -38,6 +60,7 @@ namespace FundooRepository.Repository
                         await this.userContext.SaveChangesAsync();
                         return "Successfully created note";
                     }
+
                 }
                 return "Unsuccessful to create Note";
             }
@@ -47,6 +70,11 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Change title or body or both
+        /// </summary>
+        /// <param name="notesData">NotesModel</param>
+        /// <returns>http response</returns>
         public async Task<string> EditNote(NotesModel notesData)
         {
             try
@@ -80,21 +108,28 @@ namespace FundooRepository.Repository
             }
         }
 
-        public async Task<string> EditIsArchive(NotesModel noteData)
+        /// <summary>
+        /// move to archive
+        /// </summary>
+        /// <param name="noteData">NotesModel</param>
+        /// <returns>http response</returns>
+        public async Task<string> EditIsArchive(int noteId)
         {
             try
             {
-                var validNoteId = this.userContext.Notes.Where(x => x.NoteId == noteData.NoteId).FirstOrDefault();
+                var validNoteId = this.userContext.Notes.Where(x => x.NoteId == noteId).FirstOrDefault();
                 if (validNoteId != null)
                 {
                     if (validNoteId.IsPin)
                     {
                         validNoteId.IsPin = false;
+
                     }
-                    validNoteId.IsArchive = noteData.IsArchive;
+                    validNoteId.IsArchive = true;
                     this.userContext.Update(validNoteId);
                     await this.userContext.SaveChangesAsync();
                     return "Successfully archive note";
+
                 }
                 return "Unsuccessful to archive Note";
             }
@@ -104,11 +139,16 @@ namespace FundooRepository.Repository
             }
         }
 
-        public async Task<string> EditIsTrash(NotesModel noteData)
+        /// <summary>
+        /// move to trash
+        /// </summary>
+        /// <param name="noteData"></param>
+        /// <returns></returns>
+        public async Task<string> EditIsTrash(int noteId)
         {
             try
             {
-                var validNoteId = this.userContext.Notes.Where(x => x.NoteId == noteData.NoteId).FirstOrDefault();
+                var validNoteId = this.userContext.Notes.Where(x => x.NoteId == noteId).FirstOrDefault();
                 if (validNoteId != null)
                 {
                     if(validNoteId.IsPin)
@@ -119,7 +159,7 @@ namespace FundooRepository.Repository
                     {
                         validNoteId.IsArchive = false;
                     }
-                    validNoteId.IsTrash = noteData.IsTrash;
+                    validNoteId.IsTrash = true;
                     this.userContext.Update(validNoteId);
                     await this.userContext.SaveChangesAsync();
                     return "Successfully trash note";
@@ -132,6 +172,11 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Set Pin
+        /// </summary>
+        /// <param name="noteData">NotesModel</param>
+        /// <returns>http response</returns>
         public async Task<string> EditIsPin(NotesModel noteData)
         {
             try
@@ -152,14 +197,19 @@ namespace FundooRepository.Repository
             }
         }
 
-        public async Task<string> EditColor(NotesModel noteData)
+        /// <summary>
+        /// Setting background color for note
+        /// </summary>
+        /// <param name="noteData">NotesModel</param>
+        /// <returns>http response</returns>
+        public async Task<string> EditColor(int noteId,string noteColor)
         {
             try
             {
-                var validNoteId = this.userContext.Notes.Where(x => x.NoteId == noteData.NoteId).FirstOrDefault();
+                var validNoteId = this.userContext.Notes.Where(x => x.NoteId == noteId).FirstOrDefault();
                 if (validNoteId != null)
                 {
-                    validNoteId.Color = noteData.Color;
+                    validNoteId.Color = noteColor;
                     this.userContext.Update(validNoteId);
                     await this.userContext.SaveChangesAsync();
                     return "Successfully change color";
@@ -172,6 +222,11 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Add Reminde me
+        /// </summary>
+        /// <param name="noteData">NotesModel</param>
+        /// <returns>http response</returns>
         public async Task<string> EditRemindMe(NotesModel noteData)
         {
             try
@@ -192,6 +247,11 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Add image to note
+        /// </summary>
+        /// <param name="noteData">NotesModel</param>
+        /// <returns>http response</returns>
         public async Task<string> EditAddImage(NotesModel noteData)
         {
             try
@@ -212,21 +272,34 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Get all notes
+        /// </summary>
+        /// <param name="userid">user id</param>
+        /// <returns>http response</returns>
         public IEnumerable<NotesModel> GetAllNotes(int userid)
         {
             try
             {
                 List<NotesModel> tempList = new List<NotesModel>();
                 IEnumerable<NotesModel> result;
-                IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.UserID == userid select x;
-                foreach(var note in notes)
+                //IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.UserID == userid select x;
+                IEnumerable<NotesModel> notes = from notetb in this.userContext.Notes
+                                                where notetb.UserID == userid && notetb.IsArchive == false && notetb.IsTrash == false
+                                                select notetb;
+                //foreach (var note in notes)
+                //{
+                //    if (note.IsArchive == true && note.IsTrash == true && note.UserID == userid)
+                //    {
+                //        tempList.Add(note);
+                //    }       
+                //}
+                //result = tempList;
+                if(notes != null)
                 {
-                    if(note.IsArchive == true && note.IsTrash == true)
-                        tempList.Add(note);
+                    return notes;
                 }
-                result = tempList;
-
-                return result;
+                return null;
             }
             catch (ArgumentNullException ex)
             {
@@ -234,11 +307,18 @@ namespace FundooRepository.Repository
             }
         }
 
-        public IEnumerable<NotesModel> GetArchiveNotes(bool archive)
+        /// <summary>
+        /// Get notes which are in archive
+        /// </summary>
+        /// <param name="archive">boolean archive</param>
+        /// <returns>http response</returns>
+        public IEnumerable<NotesModel> GetArchiveNotes(int userid)
         {
             try
             {
-                IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.IsArchive == archive select x;
+                IEnumerable<NotesModel> notes = from notetb in this.userContext.Notes
+                                                where notetb.UserID == userid && notetb.IsArchive == true
+                                                select notetb;
                 return notes;
             }
             catch (ArgumentNullException ex)
@@ -247,12 +327,19 @@ namespace FundooRepository.Repository
             }
         }
 
-        public IEnumerable<NotesModel> GetTrashNotes(bool trash)
+        /// <summary>
+        /// get notes which are in trash
+        /// </summary>
+        /// <param name="trash">boolean trash</param>
+        /// <returns>http response</returns>
+        public IEnumerable<NotesModel> GetTrashNotes(int userid)
         {
             try
             {
-                
-                IEnumerable<NotesModel> notes = from x in this.userContext.Notes where x.IsTrash == trash select x;
+
+                IEnumerable<NotesModel> notes = from notetb in this.userContext.Notes
+                                                where notetb.UserID == userid && notetb.IsTrash == true
+                                                select notetb;
                 return notes;
             }
             catch (ArgumentNullException ex)
@@ -261,6 +348,12 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Upload to cloudinary website
+        /// </summary>
+        /// <param name="fileUpload">file path from user</param>
+        /// <param name="selboton">I dont know</param>
+        /// <returns>http response</returns>
         public string UploadAndGetImageUrl(IFormFile fileUpload, HttpPostAttribute selboton)
         {
             var cloudinary = new Cloudinary(

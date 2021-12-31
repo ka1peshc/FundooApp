@@ -42,7 +42,7 @@ namespace FundooRepository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Lable")
+                    b.Property<string>("Label")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int?>("NoteId")

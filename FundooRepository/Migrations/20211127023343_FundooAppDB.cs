@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FundooRepository.Migrations
 {
-    public partial class Fundoo : Migration
+    public partial class FundooAppDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -77,7 +77,7 @@ namespace FundooRepository.Migrations
                 {
                     LabelId = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Lable = table.Column<string>(nullable: true),
+                    Label = table.Column<string>(nullable: true),
                     UserId = table.Column<int>(nullable: false),
                     NoteId = table.Column<int>(nullable: true)
                 },

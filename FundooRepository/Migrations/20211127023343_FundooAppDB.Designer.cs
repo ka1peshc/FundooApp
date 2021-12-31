@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FundooRepository.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20211126103249_Fundoo")]
-    partial class Fundoo
+    [Migration("20211127023343_FundooAppDB")]
+    partial class FundooAppDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,7 +44,7 @@ namespace FundooRepository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Lable")
+                    b.Property<string>("Label")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int?>("NoteId")

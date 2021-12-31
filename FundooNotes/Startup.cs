@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http.Cors;
 
 namespace FundooNotes
 {
@@ -32,6 +33,7 @@ namespace FundooNotes
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            
             services.AddDbContext<UserContext>(options => options.UseMySql(this.Configuration.GetConnectionString("FundooDB")));
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserManager, UserManager>();
@@ -39,6 +41,19 @@ namespace FundooNotes
             services.AddTransient<INotesManager, NotesManager>();
             services.AddTransient<ICollaboratorRepository, CollaboratorRepository>();
             services.AddTransient<ICollaboratorManager, CollaboratorManager>();
+            services.AddTransient<ILabelRepository,LabelRepository>();
+            services.AddTransient<ILabelManager, LabelManager>();
+
+            services.AddCors(options =>
+            options.AddPolicy(
+            "AllowAllHeaders", builder =>
+            {
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            }));
+
+
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1.0", new OpenApiInfo { Title = "Fundoo Notes", Description = "Take your notes", Version = "1.0" });
@@ -83,6 +98,8 @@ namespace FundooNotes
                     };
                 });
             });
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,12 +115,14 @@ namespace FundooNotes
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseCors("AllowAllHeaders");
             app.UseHttpsRedirection();
             
             app.UseStaticFiles();
 
             app.UseRouting();
+            
+            
 
             app.UseAuthentication();
             app.UseAuthorization();

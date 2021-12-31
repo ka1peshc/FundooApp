@@ -1,32 +1,45 @@
-﻿using FundooModels;
-using FundooRepository.Context;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq ;
-using System.Security.Cryptography;
-using Experimental.System.Messaging;
-using System.Net.Mail;
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using StackExchange.Redis;
+﻿// <copyright file="UserRepository.cs" company="JoyBoy">
+// Copyright (c) JoyBoy. All rights reserved.
+// </copyright>
 
 namespace FundooRepository.Repository
 {
+    using System;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Security.Cryptography;
+    using System.Net.Mail;
+    using Experimental.System.Messaging;
+    using FundooModels;
+    using FundooRepository.Context;
+    using Microsoft.Extensions.Configuration;
+    using StackExchange.Redis;
+
+    /// <summary>
+    /// Interact with database
+    /// </summary>
     public class UserRepository : IUserRepository
     {
-        //reading user context and reading configuration
+        /// <summary>
+        /// private declaration of UserContext
+        /// </summary>
         private readonly UserContext userContext;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserRepository"/> class
+        /// </summary>
+        /// <param name="configuration">Configuration</param>
+        /// <param name="userContext">UserContext</param>
         public UserRepository(IConfiguration configuration, UserContext userContext)
         {
             this.Configuration = configuration;
             this.userContext = userContext;
         }
 
+        /// <summary>
+        /// Gets configuration from project
+        /// </summary>
         public IConfiguration Configuration { get; }
 
         /// <summary>
@@ -38,18 +51,16 @@ namespace FundooRepository.Repository
         {
             try
             {
-                //Fetching if any email exist 
-                //this.userContext.User is reference to FundooModels/RegisterModel.cs
                 var validEmail = this.userContext.User.Where(x => x.Email == userData.Email).FirstOrDefault();
                 if (validEmail == null)
                 {
                     if (userData != null)
                     {
-                        //Encrypt password with MD5
+                        ////Encrypt password with MD5
                         userData.Password = EncryptPassword(userData.Password);
-                        //add data to the database using user context
+                        ////add data to the database using user context
                         this.userContext.Add(userData);
-                        //Saving data in database
+                        ////Saving data in database
                         this.userContext.SaveChanges();
                         return "Registration Successful";
                     }
@@ -78,11 +89,12 @@ namespace FundooRepository.Repository
                     var validPass = this.userContext.User.Where(x => x.Password == EncryptPassword(userData.Password)).FirstOrDefault();
                     if (validPass != null)
                     {
+                        
                         ConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
                         IDatabase database = connectionMultiplexer.GetDatabase();
                         database.StringSet(key: "First Name", validEmail.FirstName);
                         database.StringSet(key: "Last Name", validEmail.LastName);
-
+                        database.StringSet(key: "User Id", validEmail.UserID);
                         return "Login Successful";
                     }
                     return "Password is invalid";
@@ -94,6 +106,7 @@ namespace FundooRepository.Repository
                 throw new Exception(e.Message);
             }
         }
+
         /// <summary>
         /// Take email and new password
         /// </summary>
@@ -108,7 +121,6 @@ namespace FundooRepository.Repository
                 {
                     if (userData != null)
                     {
-
                         validEmail.Password = EncryptPassword(validEmail.Password);
                         //add data to the database using user context
                         this.userContext.Update(validEmail);
@@ -125,6 +137,11 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Send email to change password
+        /// </summary>
+        /// <param name="email">Email</param>
+        /// <returns>string result</returns>
         public async Task<string> ForgotPassword(string email)
         {
             try
@@ -147,6 +164,10 @@ namespace FundooRepository.Repository
                 throw new Exception(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Create a Queue to send email
+        /// </summary>
         public void SendMSMQ()
         {
             MessageQueue messageQueue;
@@ -162,6 +183,11 @@ namespace FundooRepository.Repository
             messageQueue.Label = "Mail Body";
             messageQueue.Send(body);
         }
+
+        /// <summary>
+        /// Recive email
+        /// </summary>
+        /// <returns>String</returns>
         public string ReceiveMSMQ()
         {
             MessageQueue messageQueue = new MessageQueue(@".\Private$\Fundoo");
@@ -169,21 +195,25 @@ namespace FundooRepository.Repository
             return receivemsg.ToString();
         }
 
+        /// <summary>
+        /// Encrypt password using md5 algorithm
+        /// </summary>
+        /// <param name="password">password string</param>
+        /// <returns>encrypted password in string</returns>
         public string EncryptPassword(string password)
         {
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
             byte[] encrypt;
             UTF8Encoding encode = new UTF8Encoding();
-            //encrypt the given password string into Encrypted data  
+            ////encrypt the given password string into Encrypted data  
             encrypt = md5.ComputeHash(encode.GetBytes(password));
             StringBuilder encryptdata = new StringBuilder();
-            //Create a new string by using the encrypted data  
+            ////Create a new string by using the encrypted data  
             for (int i = 0; i < encrypt.Length; i++)
             {
                 encryptdata.Append(encrypt[i].ToString());
             }
             return encryptdata.ToString();
         }
-
     }
 }
